@@ -1,9 +1,7 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import { FontColorsOutlined, InfoOutlined } from "@ant-design/icons";
+import { FontColorsOutlined } from "@ant-design/icons";
 import BotFormStyled from "../styles/BotFormStyled";
-
-const { TextArea } = Input;
 
 function BotForm({ onFinish }) {
   return (
@@ -29,23 +27,6 @@ function BotForm({ onFinish }) {
           <Input
             prefix={<FontColorsOutlined className="site-form-item-icon" />}
             placeholder="Название"
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="spec"
-          label="Специализация"
-          rules={[
-            {
-              required: true,
-              message: "Введите специализацию бота!",
-            },
-          ]}
-        >
-          <TextArea
-            autoSize
-            prefix={<InfoOutlined className="site-form-item-icon" />}
-            placeholder="Специализация"
           />
         </Form.Item>
 

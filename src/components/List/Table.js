@@ -1,27 +1,24 @@
 import React from "react";
 import { Table } from "antd";
 
+const renderCustomCell = (object) => {
+  const { state } = object;
+  return <p>{state.status}</p>;
+};
+
 const columns = [
   {
     title: "ID",
-    dataIndex: "Id",
-    key: "Id",
+    dataIndex: "_id",
+    key: "_id",
     sorter: (a, b) => a.Id - b.Id,
     sortDirections: ["ascend", "descend"],
     defaultSortOrder: "ascend",
   },
   {
-    title: "Название",
-    dataIndex: "name",
-    key: "name",
-    sorter: (a, b) => a.name.localeCompare(b.name),
-    sortDirections: ["ascend", "descend"],
-  },
-
-  {
     title: "Статус",
-    dataIndex: "status",
-    key: "status",
+    key: "state_status",
+    render: (object) => renderCustomCell(object),
   },
 ];
 
@@ -34,6 +31,7 @@ function BotTable({ data }) {
         rowKey="Id"
         dataSource={data}
         style={{ clear: "both" }}
+        locale={{ emptyText: "Нет ботов" }}
       />
     </>
   );

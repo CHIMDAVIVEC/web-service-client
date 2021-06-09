@@ -1,16 +1,12 @@
-import React, {
-  createContext,
-  useReducer,
-  useCallback,
-} from "react";
+import React, { createContext, useReducer, useCallback } from "react";
 import botReducer from "./botReducer";
 import * as types from "./botActionTypes";
-import ClientAPI from "../apiUtils";
+import axios from "axios";
 
 const initialBotState = {
   loading: false,
   error: false,
-  bots: "",
+  bots: [],
   bot: null,
   errResponse: "",
   message: null,
@@ -27,15 +23,16 @@ export const BotProvider = ({ children }) => {
     });
   };
 
-  const fetchBots = useCallback(async (id) => {
+  const fetchBots = useCallback(async (login) => {
     dispatch({
       type: types.BOT_START,
     });
     try {
-      const res = await ClientAPI.post("/bot/", id);
+      const res = await axios.get(`http://localhost:8080/bots/${login}`);
+      console.log(res);
       dispatch({
         type: types.BOT_SUCCESS,
-        payload: res.data.data,
+        payload: res.data,
       });
     } catch (error) {
       dispatch({
@@ -50,7 +47,7 @@ export const BotProvider = ({ children }) => {
       type: types.BOT_START,
     });
     try {
-      const res = await ClientAPI.post("/bot/add", data);
+      const res = await axios.post("http://localhost:8080/bots", data);
       dispatch({
         type: types.BOT_ADD,
         payload: res.data.data,

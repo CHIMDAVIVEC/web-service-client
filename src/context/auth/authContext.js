@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useCallback } from "react";
 import userReducer from "./authReducer";
 import * as types from "./authActionTypes";
-import ClientAPI from "../apiUtils";
+import axios from "axios";
 
 const initialAuthState = {
   loading: false,
@@ -26,8 +26,8 @@ export const AuthProvider = ({ children }) => {
       type: types.AUTH_START,
     });
     try {
-      const res = await ClientAPI.post("/auth/login", data);
-      localStorage.setItem("howard_shores", res.data.access_token);
+      const res = await axios.post(`http://localhost:8080/users/${data.login}`, data);
+      if (res.data.message === "authorized") localStorage.setItem("howard_shores", data.login);
       dispatch({
         type: types.AUTH_SUCCESS,
         payload: res.data.access_token,

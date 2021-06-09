@@ -1,20 +1,20 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./context/auth/authContext";
+import { RegistrationProvider } from "./context/registration/regContext";
 import { BotProvider } from "./context/bot/botContext";
-import { UserProvider } from "./context/user/userContext";
 import BaseRoute from "./routes";
 
 function App() {
   return (
     <Router>
-      <UserProvider>
-        <BotProvider>
-          <AuthProvider>
+      <BotProvider>
+        <AuthProvider>
+          <RegistrationProvider>
             <BaseRoute />
-          </AuthProvider>
-        </BotProvider>
-      </UserProvider>
+          </RegistrationProvider>
+        </AuthProvider>
+      </BotProvider>
     </Router>
   );
 }

@@ -1,35 +1,29 @@
-import React, { useContext, useEffect } from "react";
-import { Form, Input, Button, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { AuthContext } from "../../context/auth/authContext";
-import checkAuth from "../../context/checkAuth";
+import React, { useContext, useEffect } from 'react';
+import { Form, Input, Button, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { RegistrationContext } from '../../context/registration/regContext';
 
-const LoginForm = ({ history }) => {
-  const { LoginAction, state, AuthReset } = useContext(AuthContext);
-  const { token, loading, error, errResponse } = state;
-  const onFinish = (values) => {
-    LoginAction(values);
+//Страница регистрации нового пользователя
+const RegForm = ({ history }) => {
+  const { RegAction, state } = useContext(RegistrationContext);
+  const { loading, error, success, errResponse } = state;
+
+  const onFinish = async (values) => {
+    await RegAction(values);
   };
-
-  useEffect(() => {
-    AuthReset();
-  }, []);
-
-  useEffect(() => {
-    const token = checkAuth();
-    if (token !== null && token !== false) {
-      history.push("/bots");
-    }
-  }, [token, history]);
 
   useEffect(() => {
     if (error) {
       message.error(errResponse);
+    } else if (success) {
+      message
+        .success('Успешная регистрация!', 1)
+        .then(() => history.push('/login'));
     }
-  }, [error, errResponse]);
+  }, [error, errResponse, success, history]);
 
-  const registration = () => {
-    history.push("/reg");
+  const login = () => {
+    history.push('/login');
   };
 
   return (
@@ -39,12 +33,12 @@ const LoginForm = ({ history }) => {
           <div className="row justify-content-center align-items-center min-vh-100">
             <div className="col-md-4 align-self-center text-center">
               <h2>Добро пожаловать!</h2>
-              <p>Введите свои данные, чтобы продолжить</p>
+              <p>Заполните поля для регистрации</p>
               <Form
-                name="normal_login"
-                className="login-form"
+                name="normal_reg"
+                className="reg-form"
                 initialValues={{
-                  remember: true,
+                  remember: true
                 }}
                 onFinish={onFinish}
                 size="large"
@@ -54,23 +48,25 @@ const LoginForm = ({ history }) => {
                   rules={[
                     {
                       required: true,
-                      message: "Введите логин!",
-                    },
+                      message: 'Введите логин!'
+                    }
                   ]}
                 >
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
+                    type="login"
                     placeholder="Логин"
                     className="rounded-pill"
                   />
                 </Form.Item>
+
                 <Form.Item
                   name="password"
                   rules={[
                     {
                       required: true,
-                      message: "Введите пароль!",
-                    },
+                      message: 'Введите пароль!'
+                    }
                   ]}
                 >
                   <Input
@@ -85,16 +81,15 @@ const LoginForm = ({ history }) => {
                   <Button
                     type="primary"
                     htmlType="submit"
-                    className="login-form-button"
+                    className="reg-form-button"
                     loading={loading}
                   >
-                    Войти
+                    Зарегистрироваться
                   </Button>
                 </Form.Item>
+
                 <Form.Item>
-                  <Button onClick={registration}>
-                    Вы ещё не зарегистрировались?
-                  </Button>
+                  <Button onClick={login}>Уже есть аккаунт?</Button>
                 </Form.Item>
               </Form>
             </div>
@@ -105,4 +100,4 @@ const LoginForm = ({ history }) => {
   );
 };
 
-export default LoginForm;
+export default RegForm;
